@@ -18,6 +18,8 @@ func TestNewRequest(t *testing.T) {
 
 	expectedHeader := "Bearer 1234"
 	require.Equal(t, expectedHeader, req.Header.Get("Authorization"))
+	require.Equal(t, "application/json", req.Header.Get("Accept"))
+	require.Equal(t, "application/json", req.Header.Get("Content-Type"))
 
 	require.Equal(t, "/v2/apis", req.URL.Path)
 	require.Equal(t, "example.base.api", req.URL.Host)

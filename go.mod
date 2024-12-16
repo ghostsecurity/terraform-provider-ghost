@@ -3,6 +3,7 @@ module github.com/ghostsecurity/terraform-provider-ghost
 go 1.23.1
 
 require (
+	github.com/google/uuid v1.6.0
 	github.com/hashicorp/terraform-plugin-framework v1.13.0
 	github.com/stretchr/testify v1.10.0
 )
