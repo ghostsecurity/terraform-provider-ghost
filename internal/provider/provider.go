@@ -57,7 +57,12 @@ func (p *GhostProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		return
 	}
 
-	apiURL, err := url.Parse(data.Endpoint.ValueString())
+	endpoint := data.Endpoint.ValueString()
+	if endpoint == "" {
+		endpoint = "https://api.ghostsecurity.com"
+	}
+
+	apiURL, err := url.Parse(endpoint)
 	if err != nil {
 		resp.Diagnostics.AddError("Invalid Endpoint",
 			fmt.Sprintf("The provided endpoint %q is not a valid URL", data.Endpoint.ValueString()))
