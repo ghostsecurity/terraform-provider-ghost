@@ -1,106 +1,69 @@
 package api
 
 import (
-	"bytes"
-	"encoding/json"
+	"context"
 	"errors"
 	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 	"time"
 
-	"github.com/google/uuid"
+	"github.com/ghostsecurity/terraform-provider-ghost/internal/api/client"
 )
 
 var ErrNotFound = errors.New("resource not found")
 
 type GhostClient struct {
-	BaseURL string
-	APIKey  string
-	HTTP    *http.Client
+	API *client.APIClient
 }
 
-func NewClient(baseURL, apiKey string) *GhostClient {
+func NewClient(baseURL, apiKey string) (*GhostClient, error) {
+	apiURL, err := url.Parse(baseURL)
+	if err != nil {
+		return nil, fmt.Errorf("new client: %v", err)
+	}
+
+	// Configure the client to use the provided API key for all requests.
+	cfg := client.NewConfiguration()
+	cfg.AddDefaultHeader("Authorization", "Bearer "+apiKey)
+
+	// Set the base URL for the client
+	cfg.Host = apiURL.Host
+	cfg.Scheme = apiURL.Scheme
+	cfg.HTTPClient = &http.Client{
+		Timeout: 60 * time.Second,
+	}
+	apiClient := client.NewAPIClient(cfg)
+
 	return &GhostClient{
-		BaseURL: baseURL,
-		APIKey:  apiKey,
-		HTTP: &http.Client{
-			Timeout: 60 * time.Second,
-		},
-	}
-}
-
-// NewRequest returns a new HTTP request using the configured BaseURL and API key.
-// The path provided should be relative to the base URL.
-func (c *GhostClient) NewRequest(method, path string, body io.Reader) (*http.Request, error) {
-	requestURL, err := url.JoinPath(c.BaseURL, path)
-	if err != nil {
-		return nil, fmt.Errorf("new request: %w", err)
-	}
-
-	req, err := http.NewRequest(method, requestURL, body)
-	if err != nil {
-		return nil, fmt.Errorf("new request: %w", err)
-	}
-
-	authHeader := "Bearer " + c.APIKey
-	req.Header.Add("Authorization", authHeader)
-	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("Accept", "application/json")
-
-	return req, nil
-}
-
-type InvalidInputError struct {
-	Err string `json:"error"`
-}
-
-type LogForwarderRequest struct {
-	Name string `json:"name"`
+		API: apiClient,
+	}, nil
 }
 
 type LogForwarder struct {
-	ID        uuid.UUID `json:"id"`
-	Name      string    `json:"name"`
-	SubjectID string    `json:"subject_id"`
+	ID        string `json:"id"`
+	Name      string `json:"name"`
+	SubjectID string `json:"subject_id"`
 }
 
 // CreateLogForwarder makes an authenticated request to the Ghost API to create a new log
 // forwarder.
-func (c *GhostClient) CreateLogForwarder(req LogForwarderRequest) (*LogForwarder, error) {
-	bodyBytes, err := json.Marshal(req)
+func (c *GhostClient) CreateLogForwarder(ctx context.Context, name string) (*LogForwarder, error) {
+	req := c.API.LogForwardersAPI.
+		CreateLogForwarder(ctx).
+		LogForwarder(client.LogForwarderCreateParams{Name: name})
+
+	forwarder, resp, err := req.Execute()
 	if err != nil {
 		return nil, fmt.Errorf("create log forwarder: %w", err)
 	}
-
-	body := bytes.NewReader(bodyBytes)
-	createReq, err := c.NewRequest("POST", "/v2/log_forwarders", body)
-	if err != nil {
-		return nil, fmt.Errorf("create log forwarder: %w", err)
-	}
-
-	resp, err := c.HTTP.Do(createReq)
-	if err != nil {
-		return nil, fmt.Errorf("create log forwarder: %w", err)
-	}
-
-	defer resp.Body.Close()
-	dec := json.NewDecoder(resp.Body)
-
 	switch resp.StatusCode {
 	case http.StatusCreated:
-		var forwarder LogForwarder
-		if err := dec.Decode(&forwarder); err != nil {
-			return nil, fmt.Errorf("create log forwarder: %w", err)
-		}
-		return &forwarder, nil
-	case http.StatusBadRequest:
-		var inputErr InvalidInputError
-		if err := dec.Decode(&inputErr); err != nil {
-			return nil, fmt.Errorf("create log forwarder: %w", err)
-		}
-		return nil, fmt.Errorf("create log forwarder: %v", inputErr.Err)
+		return &LogForwarder{
+			ID:        forwarder.Id,
+			Name:      forwarder.Name,
+			SubjectID: forwarder.SubjectId,
+		}, nil
 	default:
 		return nil, fmt.Errorf("create log forwarder: unexpected status %v", resp.StatusCode)
 	}
@@ -108,29 +71,29 @@ func (c *GhostClient) CreateLogForwarder(req LogForwarderRequest) (*LogForwarder
 
 // GetLogForwarder makes an authenticated request to the Ghost API to fetch the
 // log forwarder with the given ID.
-func (c *GhostClient) GetLogForwarder(id uuid.UUID) (*LogForwarder, error) {
-	getReq, err := c.NewRequest("GET", "/v2/log_forwarders/"+id.String(), nil)
+func (c *GhostClient) GetLogForwarder(ctx context.Context, id string) (*LogForwarder, error) {
+	req := c.API.LogForwardersAPI.GetLogForwarder(ctx, id)
+
+	forwarder, resp, err := req.Execute()
 	if err != nil {
+		// If the log forwarder with the given ID was not found return
+		// a specific error type.
+		var apiErr *client.GenericOpenAPIError
+		if errors.As(err, &apiErr) {
+			if _, ok := apiErr.Model().(client.NotFoundError); ok {
+				return nil, fmt.Errorf("delete log forwarder: %w", ErrNotFound)
+			}
+		}
 		return nil, fmt.Errorf("get log forwarder: %w", err)
 	}
-
-	resp, err := c.HTTP.Do(getReq)
-	if err != nil {
-		return nil, fmt.Errorf("get log forwarder: %w", err)
-	}
-
-	defer resp.Body.Close()
-	dec := json.NewDecoder(resp.Body)
 
 	switch resp.StatusCode {
 	case http.StatusOK:
-		var forwarder LogForwarder
-		if err := dec.Decode(&forwarder); err != nil {
-			return nil, fmt.Errorf("get log forwarder: %w", err)
-		}
-		return &forwarder, nil
-	case http.StatusNotFound:
-		return nil, fmt.Errorf("get log forwarder: %w", ErrNotFound)
+		return &LogForwarder{
+			ID:        forwarder.Id,
+			Name:      forwarder.Name,
+			SubjectID: forwarder.SubjectId,
+		}, nil
 	default:
 		return nil, fmt.Errorf("get log forwarder: unexpected status %v", resp.StatusCode)
 	}
@@ -138,23 +101,26 @@ func (c *GhostClient) GetLogForwarder(id uuid.UUID) (*LogForwarder, error) {
 
 // DeleteLogForwarder makes an authenticated request to the Ghost API to delete the
 // log forwarder with the given ID.
-func (c *GhostClient) DeleteLogForwarder(id uuid.UUID) error {
-	deleteReq, err := c.NewRequest("DELETE", "/v2/log_forwarders/"+id.String(), nil)
-	if err != nil {
-		return fmt.Errorf("delete log forwarder: %w", err)
-	}
+func (c *GhostClient) DeleteLogForwarder(ctx context.Context, id string) error {
+	req := c.API.LogForwardersAPI.DeleteLogForwarder(ctx, id)
 
-	resp, err := c.HTTP.Do(deleteReq)
+	resp, err := req.Execute()
 	if err != nil {
+		// If the log forwarder with the given ID was not found return
+		// a specific error type.
+		var apiErr *client.GenericOpenAPIError
+		if errors.As(err, &apiErr) {
+			if _, ok := apiErr.Model().(client.NotFoundError); ok {
+				return fmt.Errorf("delete log forwarder: %w", ErrNotFound)
+			}
+		}
 		return fmt.Errorf("delete log forwarder: %w", err)
 	}
 
 	switch resp.StatusCode {
 	case http.StatusNoContent:
 		return nil
-	case http.StatusNotFound:
-		return fmt.Errorf("delete log forwarder: %w", ErrNotFound)
 	default:
-		return fmt.Errorf("delete log forwarder: unexpected status %v", resp.StatusCode)
+		return fmt.Errorf("get log forwarder: unexpected status %v", resp.StatusCode)
 	}
 }

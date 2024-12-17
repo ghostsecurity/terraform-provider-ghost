@@ -69,7 +69,11 @@ func (p *GhostProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		return
 	}
 
-	client := api.NewClient(apiURL.String(), apiKey)
+	client, err := api.NewClient(apiURL.String(), apiKey)
+	if err != nil {
+		resp.Diagnostics.AddError("Error initializing API client", err.Error())
+		return
+	}
 
 	resp.DataSourceData = client
 	resp.ResourceData = client

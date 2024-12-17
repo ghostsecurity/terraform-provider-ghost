@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/ghostsecurity/terraform-provider-ghost/internal/api"
-	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
@@ -91,12 +90,10 @@ func (r *LogForwarderResource) Create(ctx context.Context, req resource.CreateRe
 		return
 	}
 
-	createReq := api.LogForwarderRequest{
-		Name: data.Name.ValueString(),
-	}
+	name := data.Name.ValueString()
 
 	// Make the API request to create the log forwarder
-	createResp, err := r.client.CreateLogForwarder(createReq)
+	createResp, err := r.client.CreateLogForwarder(ctx, name)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Error creating log forwarder",
@@ -107,7 +104,7 @@ func (r *LogForwarderResource) Create(ctx context.Context, req resource.CreateRe
 
 	// Set the forwarder ID and subject ID in the state
 	// when forwarder was created successfully.
-	data.ID = types.StringValue(createResp.ID.String())
+	data.ID = types.StringValue(createResp.ID)
 	data.SubjectID = types.StringValue(createResp.SubjectID)
 
 	diags = resp.State.Set(ctx, &data)
@@ -126,17 +123,10 @@ func (r *LogForwarderResource) Read(ctx context.Context, req resource.ReadReques
 		return
 	}
 
-	id, err := uuid.Parse(data.ID.ValueString())
-	if err != nil {
-		resp.Diagnostics.AddError(
-			"ID is not a UUID",
-			err.Error(),
-		)
-		return
-	}
+	id := data.ID.ValueString()
 
 	// Make the API request to fetch the log forwarder
-	getResp, err := r.client.GetLogForwarder(id)
+	getResp, err := r.client.GetLogForwarder(ctx, id)
 	if err != nil {
 		// If the log forwarder no longer exists, remove it from state.
 		if errors.Is(err, api.ErrNotFound) {
@@ -152,7 +142,7 @@ func (r *LogForwarderResource) Read(ctx context.Context, req resource.ReadReques
 	}
 
 	// Set the forwarder details in the state.
-	data.ID = types.StringValue(getResp.ID.String())
+	data.ID = types.StringValue(getResp.ID)
 	data.SubjectID = types.StringValue(getResp.SubjectID)
 	data.Name = types.StringValue(getResp.Name)
 
@@ -176,17 +166,10 @@ func (r *LogForwarderResource) Delete(ctx context.Context, req resource.DeleteRe
 		return
 	}
 
-	id, err := uuid.Parse(data.ID.ValueString())
-	if err != nil {
-		resp.Diagnostics.AddError(
-			"ID is not a UUID",
-			err.Error(),
-		)
-		return
-	}
+	id := data.ID.ValueString()
 
 	// Make the API request to fetch the log forwarder
-	if err := r.client.DeleteLogForwarder(id); err != nil {
+	if err := r.client.DeleteLogForwarder(ctx, id); err != nil {
 		// If the log forwarder has already been deleted do not error.
 		if !errors.Is(err, api.ErrNotFound) {
 			resp.Diagnostics.AddError(
