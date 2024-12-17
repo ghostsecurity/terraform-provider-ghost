@@ -99,3 +99,28 @@ func (c *GhostClient) CreateLogForwarder(req LogForwarderRequest) (*LogForwarder
 		return nil, fmt.Errorf("create log forwarder: unexpected status %v", resp.StatusCode)
 	}
 }
+
+// GetLogForwarder makes an authenticated request to the Ghost API to fetch the
+// log forwarder with the given ID.
+func (c *GhostClient) GetLogForwarder(id uuid.UUID) (*LogForwarder, error) {
+	getReq, err := c.NewRequest("GET", "/v2/log_forwarders/"+id.String(), nil)
+
+	resp, err := c.HTTP.Do(getReq)
+	if err != nil {
+		return nil, fmt.Errorf("get log forwarder: %w", err)
+	}
+
+	defer resp.Body.Close()
+	dec := json.NewDecoder(resp.Body)
+
+	switch resp.StatusCode {
+	case http.StatusOK:
+		var forwarder LogForwarder
+		if err := dec.Decode(&forwarder); err != nil {
+			return nil, fmt.Errorf("get log forwarder: %w", err)
+		}
+		return &forwarder, nil
+	default:
+		return nil, fmt.Errorf("get log forwarder: unexpected status %v", resp.StatusCode)
+	}
+}

@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/ghostsecurity/terraform-provider-ghost/internal/api"
+	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
@@ -113,7 +114,44 @@ func (r *LogForwarderResource) Create(ctx context.Context, req resource.CreateRe
 }
 
 func (r *LogForwarderResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	// To be implemented
+	var data LogForwarderResourceModel
+
+	diags := req.State.Get(ctx, &data)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	id, err := uuid.Parse(data.ID.ValueString())
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"ID is not a UUID",
+			err.Error(),
+		)
+		return
+	}
+
+	// Make the API request to fetch the log forwarder
+	// TODO: handle 404 explicitly to remove the resource from state
+	getResp, err := r.client.GetLogForwarder(id)
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Error fetching log forwarder",
+			err.Error(),
+		)
+		return
+	}
+
+	// Set the forwarder details in the state.
+	data.ID = types.StringValue(getResp.ID.String())
+	data.SubjectID = types.StringValue(getResp.SubjectID)
+	data.Name = types.StringValue(getResp.Name)
+
+	diags = resp.State.Set(ctx, &data)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 }
 
 func (r *LogForwarderResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
