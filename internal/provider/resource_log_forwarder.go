@@ -198,5 +198,4 @@ func (r *LogForwarderResource) Delete(ctx context.Context, req resource.DeleteRe
 	}
 
 	resp.State.RemoveResource(ctx)
-	return
 }

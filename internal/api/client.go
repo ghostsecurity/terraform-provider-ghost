@@ -76,6 +76,9 @@ func (c *GhostClient) CreateLogForwarder(req LogForwarderRequest) (*LogForwarder
 
 	body := bytes.NewReader(bodyBytes)
 	createReq, err := c.NewRequest("POST", "/v2/log_forwarders", body)
+	if err != nil {
+		return nil, fmt.Errorf("create log forwarder: %w", err)
+	}
 
 	resp, err := c.HTTP.Do(createReq)
 	if err != nil {
@@ -107,6 +110,9 @@ func (c *GhostClient) CreateLogForwarder(req LogForwarderRequest) (*LogForwarder
 // log forwarder with the given ID.
 func (c *GhostClient) GetLogForwarder(id uuid.UUID) (*LogForwarder, error) {
 	getReq, err := c.NewRequest("GET", "/v2/log_forwarders/"+id.String(), nil)
+	if err != nil {
+		return nil, fmt.Errorf("get log forwarder: %w", err)
+	}
 
 	resp, err := c.HTTP.Do(getReq)
 	if err != nil {
@@ -134,6 +140,9 @@ func (c *GhostClient) GetLogForwarder(id uuid.UUID) (*LogForwarder, error) {
 // log forwarder with the given ID.
 func (c *GhostClient) DeleteLogForwarder(id uuid.UUID) error {
 	deleteReq, err := c.NewRequest("DELETE", "/v2/log_forwarders/"+id.String(), nil)
+	if err != nil {
+		return fmt.Errorf("delete log forwarder: %w", err)
+	}
 
 	resp, err := c.HTTP.Do(deleteReq)
 	if err != nil {
