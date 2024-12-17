@@ -38,6 +38,9 @@ func (r *LogForwarderResource) Schema(_ context.Context, _ resource.SchemaReques
 			"name": schema.StringAttribute{
 				MarkdownDescription: "Unique name for the log forwarder.",
 				Required:            true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
 			},
 			"id": schema.StringAttribute{
 				MarkdownDescription: "Log forwarder UUID.",
@@ -154,8 +157,8 @@ func (r *LogForwarderResource) Read(ctx context.Context, req resource.ReadReques
 	}
 }
 
+// Update is not supported and all attribute changes should require a replace
 func (r *LogForwarderResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	// To be implemented
 }
 
 func (r *LogForwarderResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
