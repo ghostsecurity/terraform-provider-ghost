@@ -159,5 +159,33 @@ func (r *LogForwarderResource) Update(ctx context.Context, req resource.UpdateRe
 }
 
 func (r *LogForwarderResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	// To be implemented
+	var data LogForwarderResourceModel
+
+	diags := req.State.Get(ctx, &data)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	id, err := uuid.Parse(data.ID.ValueString())
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"ID is not a UUID",
+			err.Error(),
+		)
+		return
+	}
+
+	// Make the API request to fetch the log forwarder
+	// TODO: handle 404 explicitly
+	if err := r.client.DeleteLogForwarder(id); err != nil {
+		resp.Diagnostics.AddError(
+			"Error deleting log forwarder",
+			err.Error(),
+		)
+		return
+	}
+
+	resp.State.RemoveResource(ctx)
+	return
 }

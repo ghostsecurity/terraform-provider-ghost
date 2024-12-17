@@ -124,3 +124,21 @@ func (c *GhostClient) GetLogForwarder(id uuid.UUID) (*LogForwarder, error) {
 		return nil, fmt.Errorf("get log forwarder: unexpected status %v", resp.StatusCode)
 	}
 }
+
+// DeleteLogForwarder makes an authenticated request to the Ghost API to delete the
+// log forwarder with the given ID.
+func (c *GhostClient) DeleteLogForwarder(id uuid.UUID) error {
+	deleteReq, err := c.NewRequest("DELETE", "/v2/log_forwarders/"+id.String(), nil)
+
+	resp, err := c.HTTP.Do(deleteReq)
+	if err != nil {
+		return fmt.Errorf("get log forwarder: %w", err)
+	}
+
+	switch resp.StatusCode {
+	case http.StatusNoContent:
+		return nil
+	default:
+		return fmt.Errorf("get log forwarder: unexpected status %v", resp.StatusCode)
+	}
+}
