@@ -2,6 +2,7 @@ package provider
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/ghostsecurity/terraform-provider-ghost/internal/api"
@@ -135,9 +136,14 @@ func (r *LogForwarderResource) Read(ctx context.Context, req resource.ReadReques
 	}
 
 	// Make the API request to fetch the log forwarder
-	// TODO: handle 404 explicitly to remove the resource from state
 	getResp, err := r.client.GetLogForwarder(id)
 	if err != nil {
+		// If the log forwarder no longer exists, remove it from state.
+		if errors.Is(err, api.ErrNotFound) {
+			resp.State.RemoveResource(ctx)
+			return
+		}
+
 		resp.Diagnostics.AddError(
 			"Error fetching log forwarder",
 			err.Error(),
@@ -180,13 +186,15 @@ func (r *LogForwarderResource) Delete(ctx context.Context, req resource.DeleteRe
 	}
 
 	// Make the API request to fetch the log forwarder
-	// TODO: handle 404 explicitly
 	if err := r.client.DeleteLogForwarder(id); err != nil {
-		resp.Diagnostics.AddError(
-			"Error deleting log forwarder",
-			err.Error(),
-		)
-		return
+		// If the log forwarder has already been deleted do not error.
+		if !errors.Is(err, api.ErrNotFound) {
+			resp.Diagnostics.AddError(
+				"Error deleting log forwarder",
+				err.Error(),
+			)
+			return
+		}
 	}
 
 	resp.State.RemoveResource(ctx)

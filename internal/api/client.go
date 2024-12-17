@@ -3,6 +3,7 @@ package api
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -11,6 +12,8 @@ import (
 
 	"github.com/google/uuid"
 )
+
+var ErrNotFound = errors.New("resource not found")
 
 type GhostClient struct {
 	BaseURL string
@@ -120,6 +123,8 @@ func (c *GhostClient) GetLogForwarder(id uuid.UUID) (*LogForwarder, error) {
 			return nil, fmt.Errorf("get log forwarder: %w", err)
 		}
 		return &forwarder, nil
+	case http.StatusNotFound:
+		return nil, fmt.Errorf("get log forwarder: %w", ErrNotFound)
 	default:
 		return nil, fmt.Errorf("get log forwarder: unexpected status %v", resp.StatusCode)
 	}
@@ -132,13 +137,15 @@ func (c *GhostClient) DeleteLogForwarder(id uuid.UUID) error {
 
 	resp, err := c.HTTP.Do(deleteReq)
 	if err != nil {
-		return fmt.Errorf("get log forwarder: %w", err)
+		return fmt.Errorf("delete log forwarder: %w", err)
 	}
 
 	switch resp.StatusCode {
 	case http.StatusNoContent:
 		return nil
+	case http.StatusNotFound:
+		return fmt.Errorf("delete log forwarder: %w", ErrNotFound)
 	default:
-		return fmt.Errorf("get log forwarder: unexpected status %v", resp.StatusCode)
+		return fmt.Errorf("delete log forwarder: unexpected status %v", resp.StatusCode)
 	}
 }
