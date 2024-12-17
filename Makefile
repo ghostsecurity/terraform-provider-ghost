@@ -14,9 +14,11 @@ lint:
 	golangci-lint run
 
 openapi-client:
+	which openapi-generator-cli 2>/dev/null || npm install -g @openapitools/openapi-generator-cli 
+	openapi-generator-cli version-manager set 7.10.0
 	openapi-generator-cli generate -c openapi-client-config.json
 
-generate:
+generate: openapi-client
 	go generate
 
 check-clean:
