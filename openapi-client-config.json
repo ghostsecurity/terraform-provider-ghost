@@ -1,0 +1,14 @@
+{
+    "generatorName": "go",
+    "inputSpec": "openapi.json",
+    "outputDir": "internal/api/client",
+    "packageName": "client",
+    "withGoMod": false,
+    "isGoSubmodule": true,
+    "globalProperties": {
+        "apiDocs": false,
+        "modelDocs": false,
+        "apiTests": false,
+        "modelTests": false
+    }
+}

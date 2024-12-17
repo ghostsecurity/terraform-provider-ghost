@@ -1,0 +1,6305 @@
+{
+  "components": {
+    "schemas": {
+      "API": {
+        "properties": {
+          "app_count": {
+            "example": 2,
+            "type": "integer"
+          },
+          "created_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          },
+          "endpoint_count": {
+            "example": 2,
+            "type": "integer"
+          },
+          "host": {
+            "$ref": "#/components/schemas/Host"
+          },
+          "id": {
+            "example": "91e0250b-c741-434e-ae11-652492bbde41",
+            "type": "string"
+          },
+          "is_first_party": {
+            "example": true,
+            "type": "boolean"
+          },
+          "traffic_volume": {
+            "$ref": "#/components/schemas/TimeSeries"
+          },
+          "vulnerabilities": {
+            "$ref": "#/components/schemas/VulnerabilityCount"
+          }
+        },
+        "required": [
+          "app_count",
+          "created_at",
+          "endpoint_count",
+          "host",
+          "id",
+          "is_first_party",
+          "traffic_volume"
+        ],
+        "type": "object"
+      },
+      "AccessDeniedError": {
+        "properties": {
+          "error": {
+            "example": "Access Denied",
+            "type": "string"
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "type": "object"
+      },
+      "ApiCounts": {
+        "properties": {
+          "first_party": {
+            "type": "integer"
+          },
+          "third_party": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "first_party",
+          "third_party",
+          "total"
+        ],
+        "type": "object"
+      },
+      "App": {
+        "properties": {
+          "api_counts": {
+            "$ref": "#/components/schemas/ApiCounts"
+          },
+          "asset_counts": {
+            "$ref": "#/components/schemas/AssetCounts"
+          },
+          "created_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          },
+          "endpoint_counts": {
+            "$ref": "#/components/schemas/EndpointCounts"
+          },
+          "environment": {
+            "enum": [
+              "development",
+              "staging",
+              "production"
+            ],
+            "example": "staging",
+            "type": "string"
+          },
+          "host": {
+            "$ref": "#/components/schemas/Host"
+          },
+          "id": {
+            "example": "91e0250b-c741-434e-ae11-652492bbde41",
+            "type": "string"
+          },
+          "is_public": {
+            "example": true,
+            "type": "boolean"
+          },
+          "last_scanned_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          },
+          "name": {
+            "example": "Stock System",
+            "type": "string"
+          },
+          "screenshot_url": {
+            "type": "string"
+          },
+          "updated_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          },
+          "vulnerabilities": {
+            "$ref": "#/components/schemas/VulnerabilityCount"
+          }
+        },
+        "required": [
+          "asset_counts",
+          "created_at",
+          "endpoint_counts",
+          "environment",
+          "host",
+          "id",
+          "is_public",
+          "last_scanned_at",
+          "name",
+          "screenshot_url",
+          "updated_at"
+        ],
+        "type": "object"
+      },
+      "AppEndpoint": {
+        "properties": {
+          "endpoint": {
+            "$ref": "#/components/schemas/Endpoint"
+          },
+          "last_scanned_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          }
+        },
+        "required": [
+          "endpoint",
+          "last_scanned_at"
+        ],
+        "type": "object"
+      },
+      "Asset": {
+        "properties": {
+          "created_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          },
+          "host": {
+            "$ref": "#/components/schemas/Host"
+          },
+          "id": {
+            "example": "91e0250b-c741-434e-ae11-652492bbde41",
+            "type": "string"
+          },
+          "is_first_party": {
+            "example": true,
+            "type": "boolean"
+          },
+          "kind": {
+            "example": "script",
+            "type": "string"
+          },
+          "last_seen_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          },
+          "path": {
+            "example": "/my/path/foobar.js",
+            "type": "string"
+          }
+        },
+        "required": [
+          "created_at",
+          "host",
+          "id",
+          "is_first_party",
+          "kind",
+          "last_seen_at",
+          "path"
+        ],
+        "type": "object"
+      },
+      "AssetCount": {
+        "properties": {
+          "first_party": {
+            "type": "integer"
+          },
+          "third_party": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "first_party",
+          "third_party",
+          "total"
+        ],
+        "type": "object"
+      },
+      "AssetCounts": {
+        "properties": {
+          "script": {
+            "$ref": "#/components/schemas/AssetCount"
+          }
+        },
+        "required": [
+          "script"
+        ],
+        "type": "object"
+      },
+      "AuthError": {
+        "properties": {
+          "error": {
+            "example": "Invalid JWT",
+            "type": "string"
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "type": "object"
+      },
+      "Bin": {
+        "properties": {
+          "count": {
+            "type": "integer"
+          },
+          "interval_end": {
+            "type": "string"
+          },
+          "interval_start": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "count",
+          "interval_end",
+          "interval_start"
+        ],
+        "type": "object"
+      },
+      "Campaign": {
+        "properties": {
+          "created_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          },
+          "created_by": {
+            "$ref": "#/components/schemas/User"
+          },
+          "deadline_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          },
+          "id": {
+            "example": "91e0250b-c741-434e-ae11-652492bbde41",
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "example": "active",
+            "type": "string"
+          },
+          "updated_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          },
+          "vulnerabilities": {
+            "$ref": "#/components/schemas/VulnerabilityCount"
+          },
+          "vulnerabilities_burndown": {
+            "$ref": "#/components/schemas/TimeSeries"
+          }
+        },
+        "required": [
+          "created_at",
+          "created_by",
+          "id",
+          "name",
+          "status",
+          "updated_at",
+          "vulnerabilities",
+          "vulnerabilities_burndown"
+        ],
+        "type": "object"
+      },
+      "Certificate": {
+        "properties": {
+          "issuer": {
+            "$ref": "#/components/schemas/DistinguishedName"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/CertificateMetadata"
+          },
+          "subject": {
+            "$ref": "#/components/schemas/DistinguishedName"
+          },
+          "subject_alternative_names": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "validity": {
+            "$ref": "#/components/schemas/CertificateValidity"
+          }
+        },
+        "required": [
+          "issuer",
+          "subject",
+          "subject_alternative_names",
+          "validity"
+        ],
+        "type": "object"
+      },
+      "CertificateMetadata": {
+        "properties": {
+          "invalid_ca_reason": {
+            "type": "string"
+          },
+          "invalid_hostname_reason": {
+            "type": "string"
+          },
+          "valid_ca": {
+            "type": "boolean"
+          },
+          "valid_hostname": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "valid_ca",
+          "valid_hostname"
+        ],
+        "type": "object"
+      },
+      "CertificateValidity": {
+        "properties": {
+          "not_after": {
+            "type": "string"
+          },
+          "not_before": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "not_after",
+          "not_before"
+        ],
+        "type": "object"
+      },
+      "DistinguishedName": {
+        "properties": {
+          "common_name": {
+            "type": "string"
+          },
+          "country": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "locality": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "organization": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "organizational_unit": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "postal_code": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "province": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "serial_number": {
+            "type": "string"
+          },
+          "street_address": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "common_name"
+        ],
+        "type": "object"
+      },
+      "Domain": {
+        "properties": {
+          "created_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          },
+          "discovered_host_count": {
+            "description": "TODO: Deprecate this when clients are only using the DomainSummary field.",
+            "example": 1,
+            "type": "integer"
+          },
+          "discovery_status": {
+            "example": "created",
+            "type": "string"
+          },
+          "domain_summary": {
+            "$ref": "#/components/schemas/DomainSummary"
+          },
+          "enabled": {
+            "example": true,
+            "type": "boolean"
+          },
+          "first_party": {
+            "example": true,
+            "type": "boolean"
+          },
+          "id": {
+            "example": "91e0250b-c741-434e-ae11-652492bbde41",
+            "type": "string"
+          },
+          "is_healthy": {
+            "example": true,
+            "type": "boolean"
+          },
+          "is_system_created": {
+            "example": true,
+            "type": "boolean"
+          },
+          "last_scanned_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          },
+          "name": {
+            "example": "ghost.security",
+            "type": "string"
+          },
+          "updated_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          }
+        },
+        "required": [
+          "created_at",
+          "discovered_host_count",
+          "discovery_status",
+          "domain_summary",
+          "enabled",
+          "first_party",
+          "id",
+          "is_healthy",
+          "is_system_created",
+          "last_scanned_at",
+          "name",
+          "updated_at"
+        ],
+        "type": "object"
+      },
+      "DomainSummary": {
+        "properties": {
+          "app_count": {
+            "example": 0,
+            "type": "integer"
+          },
+          "endpoint_count": {
+            "example": 0,
+            "type": "integer"
+          },
+          "host_count": {
+            "example": 0,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "app_count",
+          "endpoint_count",
+          "host_count"
+        ],
+        "type": "object"
+      },
+      "Endpoint": {
+        "properties": {
+          "created_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          },
+          "format": {
+            "example": "REST",
+            "type": "string"
+          },
+          "host": {
+            "$ref": "#/components/schemas/Host"
+          },
+          "id": {
+            "example": "91e0250b-c741-434e-ae11-652492bbde41",
+            "type": "string"
+          },
+          "is_first_party": {
+            "example": true,
+            "type": "boolean"
+          },
+          "kinds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "method": {
+            "example": "GET",
+            "type": "string"
+          },
+          "path_template": {
+            "example": "/health",
+            "type": "string"
+          },
+          "port": {
+            "example": 443,
+            "type": "integer"
+          },
+          "traffic_summary": {
+            "$ref": "#/components/schemas/EndpointTrafficSummary"
+          }
+        },
+        "required": [
+          "created_at",
+          "format",
+          "host",
+          "id",
+          "is_first_party",
+          "kinds",
+          "method",
+          "path_template",
+          "port"
+        ],
+        "type": "object"
+      },
+      "EndpointApp": {
+        "properties": {
+          "app": {
+            "$ref": "#/components/schemas/App"
+          },
+          "last_scanned_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          }
+        },
+        "required": [
+          "app",
+          "last_scanned_at"
+        ],
+        "type": "object"
+      },
+      "EndpointCount": {
+        "properties": {
+          "first_party": {
+            "type": "integer"
+          },
+          "third_party": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "first_party",
+          "third_party",
+          "total"
+        ],
+        "type": "object"
+      },
+      "EndpointCounts": {
+        "properties": {
+          "api": {
+            "$ref": "#/components/schemas/EndpointCount"
+          },
+          "html": {
+            "$ref": "#/components/schemas/EndpointCount"
+          }
+        },
+        "required": [
+          "api",
+          "html"
+        ],
+        "type": "object"
+      },
+      "EndpointTrafficSummary": {
+        "properties": {
+          "average_requests_per_hour": {
+            "example": 7,
+            "type": "integer"
+          },
+          "first_traffic_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          },
+          "last_traffic_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          },
+          "request_count": {
+            "example": 100,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "average_requests_per_hour",
+          "first_traffic_at",
+          "last_traffic_at",
+          "request_count"
+        ],
+        "type": "object"
+      },
+      "EndpointsCount": {
+        "properties": {
+          "count": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "count"
+        ],
+        "type": "object"
+      },
+      "Host": {
+        "properties": {
+          "certificates": {
+            "items": {
+              "$ref": "#/components/schemas/Certificate"
+            },
+            "type": "array"
+          },
+          "cnames": {
+            "items": {
+              "$ref": "#/components/schemas/HostCNAMEInfo"
+            },
+            "type": "array"
+          },
+          "created_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          },
+          "domain_id": {
+            "example": "91e0250b-c741-434e-ae11-652492bbde41",
+            "type": "string"
+          },
+          "id": {
+            "example": "91e0250b-c741-434e-ae11-652492bbde41",
+            "type": "string"
+          },
+          "ipv4_addresses": {
+            "items": {
+              "$ref": "#/components/schemas/HostAddressInfo"
+            },
+            "type": "array"
+          },
+          "ipv6_addresses": {
+            "items": {
+              "$ref": "#/components/schemas/HostAddressInfo"
+            },
+            "type": "array"
+          },
+          "name": {
+            "example": "Ghost Security",
+            "type": "string"
+          },
+          "tls_versions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "updated_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          }
+        },
+        "required": [
+          "certificates",
+          "cnames",
+          "created_at",
+          "domain_id",
+          "id",
+          "ipv4_addresses",
+          "ipv6_addresses",
+          "name",
+          "tls_versions",
+          "updated_at"
+        ],
+        "type": "object"
+      },
+      "HostAddressInfo": {
+        "properties": {
+          "address": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "address",
+          "provider"
+        ],
+        "type": "object"
+      },
+      "HostCNAMEInfo": {
+        "properties": {
+          "host": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "host",
+          "provider"
+        ],
+        "type": "object"
+      },
+      "Icon": {
+        "properties": {
+          "name": {
+            "maxLength": 20,
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      },
+      "InvalidInputError": {
+        "properties": {
+          "error": {
+            "example": "Invalid ID",
+            "type": "string"
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "type": "object"
+      },
+      "Issue": {
+        "properties": {
+          "category": {
+            "$ref": "#/components/schemas/IssueCategory"
+          },
+          "description": {
+            "type": "string"
+          },
+          "id": {
+            "example": "91e0250b-c741-434e-ae11-652492bbde41",
+            "type": "string"
+          },
+          "name": {
+            "example": "Certificates and Encryption",
+            "type": "string"
+          },
+          "remediation_steps": {
+            "type": "string"
+          },
+          "reproduction_steps": {
+            "type": "string"
+          },
+          "resource_kind": {
+            "example": "resource_kind",
+            "type": "string"
+          },
+          "severity": {
+            "example": "critical",
+            "type": "string"
+          },
+          "vulnerabilities": {
+            "$ref": "#/components/schemas/VulnerabilityCount"
+          }
+        },
+        "required": [
+          "category",
+          "description",
+          "id",
+          "name",
+          "remediation_steps",
+          "reproduction_steps",
+          "resource_kind",
+          "severity"
+        ],
+        "type": "object"
+      },
+      "IssueCategory": {
+        "properties": {
+          "best_practices": {
+            "format": "markdown",
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "executive_summary": {
+            "format": "markdown",
+            "type": "string"
+          },
+          "icon": {
+            "$ref": "#/components/schemas/Icon"
+          },
+          "id": {
+            "example": "91e0250b-c741-434e-ae11-652492bbde41",
+            "type": "string"
+          },
+          "name": {
+            "example": "Certificates and Encryption",
+            "type": "string"
+          },
+          "vulnerabilities": {
+            "$ref": "#/components/schemas/VulnerabilityCount"
+          }
+        },
+        "required": [
+          "best_practices",
+          "description",
+          "executive_summary",
+          "icon",
+          "id",
+          "name"
+        ],
+        "type": "object"
+      },
+      "IssueCategoryCreate": {
+        "properties": {
+          "best_practices": {
+            "format": "markdown",
+            "maxLength": 2000,
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 250,
+            "type": "string"
+          },
+          "executive_summary": {
+            "format": "markdown",
+            "maxLength": 2000,
+            "type": "string"
+          },
+          "icon": {
+            "$ref": "#/components/schemas/Icon"
+          },
+          "name": {
+            "maxLength": 50,
+            "type": "string"
+          }
+        },
+        "required": [
+          "best_practices",
+          "description",
+          "executive_summary",
+          "name"
+        ],
+        "type": "object"
+      },
+      "IssueCategoryUpdateParams": {
+        "properties": {
+          "best_practices": {
+            "format": "markdown",
+            "maxLength": 2000,
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 250,
+            "type": "string"
+          },
+          "executive_summary": {
+            "format": "markdown",
+            "maxLength": 2000,
+            "type": "string"
+          },
+          "icon": {
+            "$ref": "#/components/schemas/Icon"
+          },
+          "name": {
+            "maxLength": 50,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "IssueCreateParams": {
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "description": {
+            "example": "A description of what this issue is",
+            "type": "string"
+          },
+          "name": {
+            "example": "Certificates and Encryption",
+            "type": "string"
+          },
+          "remediation_steps": {
+            "example": "How to remediate",
+            "format": "markdown",
+            "type": "string"
+          },
+          "reproduction_steps": {
+            "example": "How to reproduce",
+            "format": "markdown",
+            "type": "string"
+          },
+          "resource_kind": {
+            "enum": [
+              "api",
+              "app",
+              "asset",
+              "domain",
+              "endpoint",
+              "host"
+            ],
+            "example": "resource_kind",
+            "type": "string"
+          },
+          "severity": {
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ],
+            "example": "critical",
+            "type": "string"
+          }
+        },
+        "required": [
+          "category",
+          "description",
+          "name",
+          "remediation_steps",
+          "resource_kind",
+          "severity"
+        ],
+        "type": "object"
+      },
+      "IssueUpdateParams": {
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "description": {
+            "example": "A description of what this issue is",
+            "type": "string"
+          },
+          "name": {
+            "example": "Certificates and Encryption",
+            "type": "string"
+          },
+          "remediation_steps": {
+            "example": "How to remediate",
+            "format": "markdown",
+            "type": "string"
+          },
+          "reproduction_steps": {
+            "example": "How to reproduce",
+            "format": "markdown",
+            "type": "string"
+          },
+          "severity": {
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ],
+            "example": "critical",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "LogForwarder": {
+        "properties": {
+          "account_id": {
+            "example": "123456789012",
+            "type": "string"
+          },
+          "created_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          },
+          "id": {
+            "example": "91e0250b-c741-434e-ae11-652492bbde41",
+            "type": "string"
+          },
+          "is_healthy": {
+            "type": "boolean"
+          },
+          "last_processed_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string"
+          },
+          "stack_id": {
+            "type": "string"
+          },
+          "subject_id": {
+            "example": "000000000000000000000",
+            "type": "string"
+          }
+        },
+        "required": [
+          "created_at",
+          "id",
+          "name",
+          "subject_id"
+        ],
+        "type": "object"
+      },
+      "LogForwarderCreateParams": {
+        "properties": {
+          "name": {
+            "example": "my-log-forwarder",
+            "maxLength": 50,
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      },
+      "NotFoundError": {
+        "properties": {
+          "error": {
+            "example": "Not found",
+            "type": "string"
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "type": "object"
+      },
+      "PaginatedAPI": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/API"
+            },
+            "type": "array"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "pages": {
+            "type": "integer"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "pages",
+          "size",
+          "total"
+        ],
+        "type": "object"
+      },
+      "PaginatedAPIEndpoint": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Endpoint"
+            },
+            "type": "array"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "pages": {
+            "type": "integer"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "pages",
+          "size",
+          "total"
+        ],
+        "type": "object"
+      },
+      "PaginatedApp": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/App"
+            },
+            "type": "array"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "pages": {
+            "type": "integer"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "pages",
+          "size",
+          "total"
+        ],
+        "type": "object"
+      },
+      "PaginatedAppEndpoint": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AppEndpoint"
+            },
+            "type": "array"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "pages": {
+            "type": "integer"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "pages",
+          "size",
+          "total"
+        ],
+        "type": "object"
+      },
+      "PaginatedAsset": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Asset"
+            },
+            "type": "array"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "pages": {
+            "type": "integer"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "pages",
+          "size",
+          "total"
+        ],
+        "type": "object"
+      },
+      "PaginatedCampaign": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Campaign"
+            },
+            "type": "array"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "pages": {
+            "type": "integer"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "pages",
+          "size",
+          "total"
+        ],
+        "type": "object"
+      },
+      "PaginatedDomain": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Domain"
+            },
+            "type": "array"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "pages": {
+            "type": "integer"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "pages",
+          "size",
+          "total"
+        ],
+        "type": "object"
+      },
+      "PaginatedEndpoint": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Endpoint"
+            },
+            "type": "array"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "pages": {
+            "type": "integer"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "pages",
+          "size",
+          "total"
+        ],
+        "type": "object"
+      },
+      "PaginatedEndpointApp": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/EndpointApp"
+            },
+            "type": "array"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "pages": {
+            "type": "integer"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "pages",
+          "size",
+          "total"
+        ],
+        "type": "object"
+      },
+      "PaginatedHost": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Host"
+            },
+            "type": "array"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "pages": {
+            "type": "integer"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "pages",
+          "size",
+          "total"
+        ],
+        "type": "object"
+      },
+      "PaginatedIssue": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Issue"
+            },
+            "type": "array"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "pages": {
+            "type": "integer"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "pages",
+          "size",
+          "total"
+        ],
+        "type": "object"
+      },
+      "PaginatedIssueCategory": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/IssueCategory"
+            },
+            "type": "array"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "pages": {
+            "type": "integer"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "pages",
+          "size",
+          "total"
+        ],
+        "type": "object"
+      },
+      "PaginatedVulnerability": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Vulnerability"
+            },
+            "type": "array"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "pages": {
+            "type": "integer"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "pages",
+          "size",
+          "total"
+        ],
+        "type": "object"
+      },
+      "TimeSeries": {
+        "properties": {
+          "bins": {
+            "items": {
+              "$ref": "#/components/schemas/Bin"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "bins"
+        ],
+        "type": "object"
+      },
+      "User": {
+        "properties": {
+          "created_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "id": {
+            "example": "91e0250b-c741-434e-ae11-652492bbde41",
+            "type": "string"
+          },
+          "last_login": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "organization_id": {
+            "type": "string"
+          },
+          "organization_role": {
+            "type": "string"
+          },
+          "platform_role": {
+            "type": "string"
+          },
+          "updated_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          }
+        },
+        "required": [
+          "created_at",
+          "email",
+          "enabled",
+          "id",
+          "last_login",
+          "name",
+          "organization_id",
+          "organization_role",
+          "platform_role",
+          "updated_at"
+        ],
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "field": {
+            "example": "Name",
+            "type": "string"
+          },
+          "message": {
+            "example": "Name is invalid",
+            "type": "string"
+          },
+          "tag": {
+            "example": "min",
+            "type": "string"
+          },
+          "type": {
+            "example": "Error.ResourceUpdate.Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "field",
+          "message",
+          "tag",
+          "type"
+        ],
+        "type": "object"
+      },
+      "ValidationListError": {
+        "properties": {
+          "errors": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "errors"
+        ],
+        "type": "object"
+      },
+      "Vulnerability": {
+        "properties": {
+          "demo_data": {
+            "format": "markdown",
+            "type": "string"
+          },
+          "first_detected_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          },
+          "id": {
+            "example": "91e0250b-c741-434e-ae11-652492bbde41",
+            "type": "string"
+          },
+          "issue": {
+            "$ref": "#/components/schemas/Issue"
+          },
+          "last_detected_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          },
+          "resource": {
+            "$ref": "#/components/schemas/VulnerableResource"
+          },
+          "status": {
+            "example": "active",
+            "type": "string"
+          },
+          "suppressed_until": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          },
+          "unresolved_at": {
+            "example": "2023-01-01T00:00:00Z",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "issue",
+          "resource",
+          "status"
+        ],
+        "type": "object"
+      },
+      "VulnerabilityCount": {
+        "properties": {
+          "active": {
+            "type": "integer"
+          },
+          "resolved": {
+            "type": "integer"
+          },
+          "suppressed": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "active",
+          "resolved",
+          "suppressed",
+          "total"
+        ],
+        "type": "object"
+      },
+      "VulnerabilityUpsert": {
+        "properties": {
+          "demo_data": {
+            "format": "markdown",
+            "type": "string"
+          },
+          "issue_id": {
+            "example": "91e0250b-c741-434e-ae11-652492bbde41",
+            "type": "string"
+          },
+          "resource_id": {
+            "example": "91e0250b-c741-434e-ae11-652492bbde41",
+            "type": "string"
+          }
+        },
+        "required": [
+          "issue_id",
+          "resource_id"
+        ],
+        "type": "object"
+      },
+      "VulnerableResource": {
+        "properties": {
+          "id": {
+            "example": "91e0250b-c741-434e-ae11-652492bbde41",
+            "type": "string"
+          },
+          "kind": {
+            "example": "host",
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "name"
+        ],
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "description": "Enter your API key with the \u003cstrong\u003e\"Bearer \"\u003c/strong\u003e prefix.\u003cbr\u003eFor example: \u003cstrong\u003e\"Bearer YOUR_API_KEY\"\u003c/strong\u003e.",
+        "in": "header",
+        "name": "Authorization",
+        "type": "apiKey"
+      }
+    }
+  },
+  "info": {
+    "contact": {},
+    "description": "The Ghost API",
+    "title": "Ghost API",
+    "version": "2.0.0"
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/apis": {
+      "get": {
+        "description": "List APIs",
+        "operationId": "ListAPIs",
+        "parameters": [
+          {
+            "description": "Results per page",
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Ordering attribute with optional '-' prefix for descending order. Multiple comma delimited fields can be used. Valid attributes: host.name, endpoint_count, vulnerabilities.active, vulnerabilities.resolved, vulnerabilities.suppressed",
+            "in": "query",
+            "name": "order_by",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter list by host name",
+            "in": "query",
+            "name": "host.name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Time window over which to aggregate request counts. Must be \u003e= 1h and \u003c= 1d. For example: 1h, 8h. Must be a multiple of 1h.",
+            "in": "query",
+            "name": "bin_duration",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The start date in RFC3339 format",
+            "in": "query",
+            "name": "start_date",
+            "required": true,
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The end date in RFC3339 format",
+            "in": "query",
+            "name": "end_date",
+            "required": true,
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter by first party APIs",
+            "in": "query",
+            "name": "is_first_party",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedAPI"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationListError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List APIs",
+        "tags": [
+          "apis"
+        ]
+      }
+    },
+    "/apis/{id}": {
+      "get": {
+        "description": "Get an existing API",
+        "operationId": "GetAPI",
+        "parameters": [
+          {
+            "description": "API ID as UUID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Time window over which to aggregate request counts. Must be \u003e= 1h and \u003c= 1d. For example: 1h, 8h. Must be a multiple of 1h.",
+            "in": "query",
+            "name": "bin_duration",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The start date in RFC3339 format",
+            "in": "query",
+            "name": "start_date",
+            "required": true,
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The end date in RFC3339 format",
+            "in": "query",
+            "name": "end_date",
+            "required": true,
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/API"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationListError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Get an API",
+        "tags": [
+          "apis"
+        ]
+      }
+    },
+    "/apis/{id}/apps": {
+      "get": {
+        "description": "List all apps which belong to an API",
+        "operationId": "ListApiApps",
+        "parameters": [
+          {
+            "description": "API ID as UUID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Results per page",
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Ordering attribute with optional '-' prefix for descending order. Valid attributes: name, created_at, updated_at, last_scanned_at, environment, vulnerabilities.active, vulnerabilities.resolved, vulnerabilities.suppressed",
+            "in": "query",
+            "name": "order_by",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter by apps with a name containing the supplied string",
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter by apps with a scanned_after timestamp greater than or equal to the supplied timestamp (default: 7 days)",
+            "in": "query",
+            "name": "scanned_after",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filters for apps that belongs to an environment in the provided list.",
+            "explode": false,
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedApp"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List API apps",
+        "tags": [
+          "apis"
+        ]
+      }
+    },
+    "/apis/{id}/endpoints": {
+      "get": {
+        "description": "List all endpoints which belong to an API",
+        "operationId": "ListAPIEndpoints",
+        "parameters": [
+          {
+            "description": "API ID as UUID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Results per page",
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Order results in ascending order of field value with optional '-' prefix for descending order. One of path_template (default), method, created_at, last_traffic_at, request_rate.",
+            "in": "query",
+            "name": "order_by",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Returns only endpoints which have been seen in app scans since this timestamp inf RFC3339 format. Returns all endpoints by default.",
+            "in": "query",
+            "name": "last_traffic_after",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Only return endpoints with at least this many requests (ever)",
+            "in": "query",
+            "name": "min_request_count",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedAPIEndpoint"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List API endpoints",
+        "tags": [
+          "apis"
+        ]
+      }
+    },
+    "/apis/{id}/vulnerabilities": {
+      "get": {
+        "description": "List API vulnerabilities",
+        "operationId": "ListAPIVulnerabilities",
+        "parameters": [
+          {
+            "description": "API ID as UUID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Results per page",
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Ordering attribute with optional '-' prefix for descending order. Valid attributes: issue.severity, status, resource.kind, issue.category.name, issue.name, first_detected_at, and last_detected_at.",
+            "in": "query",
+            "name": "order_by",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filters for vulnerabilities that have a status in the provided list.",
+            "explode": false,
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filters for vulnerabilities that have been suppressed or not.",
+            "in": "query",
+            "name": "suppressed",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Filters for vulnerabilities that were first seen since the provided value - can be one of day, week, month, year",
+            "in": "query",
+            "name": "first_detected_at",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filters for vulnerabilities that were last seen since the provided value - can be one of day, week, month, year",
+            "in": "query",
+            "name": "last_detected_at",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filters for vulnerabilities that are associated with a resource kind in the provided list.",
+            "explode": false,
+            "in": "query",
+            "name": "resource.kind",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filters for vulnerabilities that belongs to a rule with a severity in the provided list.",
+            "explode": false,
+            "in": "query",
+            "name": "issue.severity",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filters for vulnerabilities that belong to a rule in the provided list.",
+            "explode": false,
+            "in": "query",
+            "name": "issue.id",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filters for vulnerabilities that belong to a rule that belongs to a category in the provided list.",
+            "explode": false,
+            "in": "query",
+            "name": "issue.category.id",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedVulnerability"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List API vulnerabilities",
+        "tags": [
+          "apis"
+        ]
+      }
+    },
+    "/apps": {
+      "get": {
+        "description": "List all existing apps",
+        "operationId": "ListApps",
+        "parameters": [
+          {
+            "description": "Results per page",
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Ordering attribute with optional '-' prefix for descending order. Valid attributes: name, created_at, updated_at, last_scanned_at, environment, vulnerabilities.active, vulnerabilities.resolved, vulnerabilities.suppressed",
+            "in": "query",
+            "name": "order_by",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter by apps with a name containing the supplied string",
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter by apps with a scanned_after timestamp greater than or equal to the supplied timestamp (default: 7 days)",
+            "in": "query",
+            "name": "scanned_after",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filters for apps that belongs to an environment in the provided list.",
+            "explode": false,
+            "in": "query",
+            "name": "environment",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedApp"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List apps",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
+    "/apps/{app_id}/assets": {
+      "get": {
+        "description": "List app assets",
+        "operationId": "ListAppAssets",
+        "parameters": [
+          {
+            "description": "App ID as UUID",
+            "in": "path",
+            "name": "app_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Results per page",
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Ordering attribute with optional '-' prefix for descending order. Valid attributes: path, last_seen_at and kind.",
+            "in": "query",
+            "name": "order_by",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter by first party assets",
+            "in": "query",
+            "name": "is_first_party",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedAsset"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List app assets",
+        "tags": [
+          "assets"
+        ]
+      }
+    },
+    "/apps/{id}": {
+      "get": {
+        "description": "Get an existing app",
+        "operationId": "GetApp",
+        "parameters": [
+          {
+            "description": "App ID as UUID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/App"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Get an app",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
+    "/apps/{id}/apis": {
+      "get": {
+        "description": "List the APIs called by an app in the most recent scan",
+        "operationId": "ListAppAPIs",
+        "parameters": [
+          {
+            "description": "App ID as UUID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Results per page",
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Order results in ascending order of field value with optional '-' prefix for descending order. One of host.name.",
+            "in": "query",
+            "name": "order_by",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter by first party APIs",
+            "in": "query",
+            "name": "is_first_party",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedAPI"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List app APIs",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
+    "/apps/{id}/endpoints": {
+      "get": {
+        "description": "List all endpoints which have been called during an app scan",
+        "operationId": "ListAppEndpoints",
+        "parameters": [
+          {
+            "description": "App ID as UUID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Results per page",
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Returns only endpoints of the specified kind. Valid options are: api, script, html, unknown.",
+            "in": "query",
+            "name": "kind",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Returns only first party endpoints when true.",
+            "in": "query",
+            "name": "is_first_party",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Order results in ascending order of field value with optional '-' prefix for descending order. One of host.name, last_scanned_at, path_template, is_first_party.",
+            "in": "query",
+            "name": "order_by",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedAppEndpoint"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List app endpoints",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
+    "/apps/{id}/vulnerabilities": {
+      "get": {
+        "description": "List App vulnerabilities",
+        "operationId": "ListAppVulnerabilities",
+        "parameters": [
+          {
+            "description": "App ID as UUID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Results per page",
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Ordering attribute with optional '-' prefix for descending order. Valid attributes: issue.severity, status, resource.kind, issue.category.name, issue.name, first_detected_at, and last_detected_at.",
+            "in": "query",
+            "name": "order_by",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filters for vulnerabilities that have a status in the provided list.",
+            "explode": false,
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filters for vulnerabilities that have been suppressed or not.",
+            "in": "query",
+            "name": "suppressed",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Filters for vulnerabilities that were first seen since the provided value - can be one of day, week, month, year",
+            "in": "query",
+            "name": "first_detected_at",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filters for vulnerabilities that were last seen since the provided value - can be one of day, week, month, year",
+            "in": "query",
+            "name": "last_detected_at",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filters for vulnerabilities that are associated with a resource kind in the provided list.",
+            "explode": false,
+            "in": "query",
+            "name": "resource.kind",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filters for vulnerabilities that belongs to a rule with a severity in the provided list.",
+            "explode": false,
+            "in": "query",
+            "name": "issue.severity",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filters for vulnerabilities that belong to a rule in the provided list.",
+            "explode": false,
+            "in": "query",
+            "name": "issue.id",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filters for vulnerabilities that belong to a rule that belongs to a category in the provided list.",
+            "explode": false,
+            "in": "query",
+            "name": "issue.category.id",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedVulnerability"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List App vulnerabilities",
+        "tags": [
+          "apps"
+        ]
+      }
+    },
+    "/campaigns": {
+      "get": {
+        "description": "List campaigns",
+        "operationId": "ListCampaigns",
+        "parameters": [
+          {
+            "description": "Results per page",
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filters for campaigns matching the given status.",
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedCampaign"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationListError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List campaigns",
+        "tags": [
+          "campaigns"
+        ]
+      }
+    },
+    "/campaigns/{campaign_id}": {
+      "get": {
+        "description": "Get a campaign",
+        "operationId": "GetCampaign",
+        "parameters": [
+          {
+            "description": "Campaign ID as UUID",
+            "in": "path",
+            "name": "campaign_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Campaign"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationListError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Get a campaign",
+        "tags": [
+          "campaigns"
+        ]
+      }
+    },
+    "/campaigns/{campaign_id}/issue_categories": {
+      "get": {
+        "description": "List campaign issue categories",
+        "operationId": "ListCampaignIssueCategories",
+        "parameters": [
+          {
+            "description": "Campaign ID as UUID",
+            "in": "path",
+            "name": "campaign_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Results per page",
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Ordering attribute with optional '-' prefix for descending order. Valid attributes: name, vulnerabilities.active, vulnerabilities.resolved",
+            "in": "query",
+            "name": "order_by",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter for categories that have active vulnerabilities",
+            "in": "query",
+            "name": "vulnerabilities.has_active",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Filter by name. Supports partial matches.",
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter for categories that have issues that have a severity in the provided list",
+            "explode": false,
+            "in": "query",
+            "name": "issue.severity",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filter for categories that have issues that have an ID in the provided list",
+            "explode": false,
+            "in": "query",
+            "name": "issue.id",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filter for categories that have an ID in the provided list",
+            "explode": false,
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedIssueCategory"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationListError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List campaign issue categories",
+        "tags": [
+          "campaigns"
+        ]
+      }
+    },
+    "/campaigns/{campaign_id}/issues": {
+      "get": {
+        "description": "List campaign issues",
+        "operationId": "ListCampaignIssues",
+        "parameters": [
+          {
+            "description": "Campaign ID as UUID",
+            "in": "path",
+            "name": "campaign_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Results per page",
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Ordering attribute with optional '-' prefix for descending order. Valid attributes: name, severity, category.name, vulnerabilities.active, vulnerabilities.resolved",
+            "in": "query",
+            "name": "order_by",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter for issues that belong to a category in the provided list",
+            "explode": false,
+            "in": "query",
+            "name": "category.id",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filter for issues that have active vulnerabilities",
+            "in": "query",
+            "name": "vulnerabilities.has_active",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filter by name. Supports partially matching.",
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter for issues that have a severity in the provided list",
+            "explode": false,
+            "in": "query",
+            "name": "severity",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filter for issues that have an ID in the provided list",
+            "explode": false,
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedIssue"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationListError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List campaign issues",
+        "tags": [
+          "campaigns"
+        ]
+      }
+    },
+    "/campaigns/{campaign_id}/vulnerabilities": {
+      "get": {
+        "description": "List campaign vulnerabilities",
+        "operationId": "ListCampaignVulnerabilities",
+        "parameters": [
+          {
+            "description": "Campaign ID as UUID",
+            "in": "path",
+            "name": "campaign_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Results per page",
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Ordering attribute with optional '-' prefix for descending order. Valid attributes: issue.severity, status, resource.kind, issue.category.name, issue.name, first_detected_at, and last_detected_at.",
+            "in": "query",
+            "name": "order_by",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filters for vulnerabilities that have a status in the provided list.",
+            "explode": false,
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filters for vulnerabilities that were first seen since the provided value - can be one of day, week, month, year",
+            "in": "query",
+            "name": "first_detected_at",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filters for vulnerabilities that were last seen since the provided value - can be one of day, week, month, year",
+            "in": "query",
+            "name": "last_detected_at",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filters for vulnerabilities that are associated with a resource kind in the provided list.",
+            "explode": false,
+            "in": "query",
+            "name": "resource.kind",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filters for vulnerabilities that belongs to a rule with a severity in the provided list.",
+            "explode": false,
+            "in": "query",
+            "name": "issue.severity",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filters for vulnerabilities that belolng to a rule in the provided list.",
+            "explode": false,
+            "in": "query",
+            "name": "issue.id",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filters for vulnerabilities that belong to a rule that belongs to a category in the provided list.",
+            "explode": false,
+            "in": "query",
+            "name": "issue.category.id",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedVulnerability"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List campaign vulnerabilities",
+        "tags": [
+          "campaigns"
+        ]
+      }
+    },
+    "/domains": {
+      "get": {
+        "description": "List domains for an organization",
+        "operationId": "ListDomains",
+        "parameters": [
+          {
+            "description": "Results per page",
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Domain Name (partial match)",
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter based on domain health",
+            "in": "query",
+            "name": "is_healthy",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Ordering attribute with optional '-' prefix for descending order. Multiple comma delimited fields can be used",
+            "in": "query",
+            "name": "order_by",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter based on first party domains",
+            "in": "query",
+            "name": "first_party",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedDomain"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List domains",
+        "tags": [
+          "domains"
+        ]
+      }
+    },
+    "/domains/{id}": {
+      "get": {
+        "description": "Fetches a domain by ID",
+        "operationId": "GetDomain",
+        "parameters": [
+          {
+            "description": "Domain ID as UUID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Domain"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Fetches a domain by ID",
+        "tags": [
+          "domains"
+        ]
+      }
+    },
+    "/endpoints": {
+      "get": {
+        "description": "List all existing endpoints",
+        "operationId": "ListEndpoints",
+        "parameters": [
+          {
+            "description": "Results per page",
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Ordering attribute with optional '-' prefix for descending order. Multiple comma delimited fields can be used. Valid attributes:  host.name, format , method, created_at, updated_at, request_rate, request_count, last_seen, path_template, hostname (deprecated)",
+            "in": "query",
+            "name": "order_by",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter by endpoints with a format matching the supplied value (currently only REST is supported)",
+            "in": "query",
+            "name": "format",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter by endpoints with methods matching the supplied values e.g. GET",
+            "explode": false,
+            "in": "query",
+            "name": "method",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Deprecated, use /apps/{id}/endpoints instead",
+            "in": "query",
+            "name": "app_id",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter by endpoints with last seen matching the supplied value - can be one of day, week, month, year",
+            "in": "query",
+            "name": "last_seen",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Search for fuzzy matches of the path template and host",
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Only return endpoints with at least this many requests (ever)",
+            "in": "query",
+            "name": "min_request_count",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filter by endpoints with hosts matching the supplied id values",
+            "explode": false,
+            "in": "query",
+            "name": "host_id",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filter by first party endpoints",
+            "in": "query",
+            "name": "is_first_party",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Filter by kind of endpoint. One of html, api, script, or unknown.",
+            "in": "query",
+            "name": "kind",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter by endpoints with ports matching one of the supplied values",
+            "explode": false,
+            "in": "query",
+            "name": "port",
+            "schema": {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Only return endpoints with at least this request_rate over the last 30 days",
+            "in": "query",
+            "name": "min_request_rate",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedEndpoint"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List endpoints",
+        "tags": [
+          "endpoints"
+        ]
+      }
+    },
+    "/endpoints/count": {
+      "get": {
+        "description": "Return a count of endpoints matching the supplied filters",
+        "operationId": "GetEndpointsCount",
+        "parameters": [
+          {
+            "description": "Filter by endpoints with a format matching the supplied value (currently only REST is supported)",
+            "in": "query",
+            "name": "format",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter by endpoints with methods matching the supplied values e.g. GET",
+            "explode": false,
+            "in": "query",
+            "name": "method",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filter by endpoints with last seen matching the supplied value - can be one of day, week, month, year",
+            "in": "query",
+            "name": "last_seen",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Search for fuzzy matches of the path template and host",
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Only return endpoints with at least this many requests (ever)",
+            "in": "query",
+            "name": "min_request_count",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filter by endpoints with hosts matching the supplied id values",
+            "explode": false,
+            "in": "query",
+            "name": "host_id",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filter by first party endpoints",
+            "in": "query",
+            "name": "is_first_party",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Filter by kind of endpoint. One of html, api, script, or unknown.",
+            "in": "query",
+            "name": "kind",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter by endpoints with ports matching one of the supplied values",
+            "explode": false,
+            "in": "query",
+            "name": "port",
+            "schema": {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Only return endpoints with at least this request_rate over the last 30 days",
+            "in": "query",
+            "name": "min_request_rate",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EndpointsCount"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Return a count of endpoints matching the supplied filters",
+        "tags": [
+          "endpoints"
+        ]
+      }
+    },
+    "/endpoints/{id}": {
+      "get": {
+        "description": "Get an existing endpoint",
+        "operationId": "GetEndpoint",
+        "parameters": [
+          {
+            "description": "Endpoint ID as UUID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Endpoint"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Get an endpoint",
+        "tags": [
+          "endpoints"
+        ]
+      }
+    },
+    "/endpoints/{id}/activity": {
+      "get": {
+        "description": "Get endpoint request volume activity",
+        "operationId": "GetEndpointActivity",
+        "parameters": [
+          {
+            "description": "Endpoint ID as UUID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Time window over which to aggregate request counts. Must be \u003e= 1h and \u003c= 1d. For example: 1h, 8h. Must be a multiple of 1h.",
+            "in": "query",
+            "name": "bin_duration",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The start date in RFC3339 format",
+            "in": "query",
+            "name": "start_date",
+            "required": true,
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The end date in RFC3339 format",
+            "in": "query",
+            "name": "end_date",
+            "required": true,
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeSeries"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationListError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Get endpoint request volume activity",
+        "tags": [
+          "endpoints"
+        ]
+      }
+    },
+    "/endpoints/{id}/apps": {
+      "get": {
+        "description": "List all apps that call an endpoint",
+        "operationId": "ListEndpointApps",
+        "parameters": [
+          {
+            "description": "Endpoint ID as UUID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Results per page",
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Ordering attribute with optional '-' prefix for descending order. Multiple comma delimited fields can be used. Valid attributes: name, last_scanned_at.",
+            "in": "query",
+            "name": "order_by",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Returns apps that were associated with an endpoint in a scan after this time. Last 7 days by default.",
+            "in": "query",
+            "name": "scanned_after",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedEndpointApp"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List endpoint apps",
+        "tags": [
+          "endpoints"
+        ]
+      }
+    },
+    "/hosts": {
+      "get": {
+        "description": "List all existing hosts",
+        "operationId": "ListHosts",
+        "parameters": [
+          {
+            "description": "Filter hosts by name",
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter hosts by a comma-separated list of cloud providers",
+            "in": "query",
+            "name": "provider",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter hosts by domain ID",
+            "in": "query",
+            "name": "domain_id",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Results per page",
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Ordering attribute with optional '-' prefix for descending order. Multiple comma delimited fields can be used",
+            "in": "query",
+            "name": "order_by",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedHost"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationListError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List hosts",
+        "tags": [
+          "hosts"
+        ]
+      }
+    },
+    "/hosts/{id}": {
+      "get": {
+        "description": "Get a Host",
+        "operationId": "GetHost",
+        "parameters": [
+          {
+            "description": "Host ID as UUID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Host"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Get a Host",
+        "tags": [
+          "hosts"
+        ]
+      }
+    },
+    "/issue_categories": {
+      "get": {
+        "description": "List issue categories",
+        "operationId": "ListIssueCategories",
+        "parameters": [
+          {
+            "description": "Results per page",
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Ordering attribute with optional '-' prefix for descending order. Valid attributes: name, vulnerabilities.active, vulnerabilities.resolved",
+            "in": "query",
+            "name": "order_by",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter by the count of active issues",
+            "in": "query",
+            "name": "vulnerabilities.active_gte",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filter by the count of resolved issues",
+            "in": "query",
+            "name": "vulnerabilities.resolved_gte",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filter for categories that have active vulnerabilities",
+            "in": "query",
+            "name": "vulnerabilities.has_active",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Filter by name. Supports partial matches.",
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter for categories that have issues that have a severity in the provided list",
+            "explode": false,
+            "in": "query",
+            "name": "issue.severity",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filter for categories that have issues that have an ID in the provided list",
+            "explode": false,
+            "in": "query",
+            "name": "issue.id",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filter for categories that have an ID in the provided list",
+            "explode": false,
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedIssueCategory"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationListError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List issue categories",
+        "tags": [
+          "issue_categories"
+        ]
+      },
+      "post": {
+        "description": "Create an issue category",
+        "operationId": "CreateIssueCategory",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IssueCategoryCreate"
+              }
+            }
+          },
+          "description": "IssueCategory",
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IssueCategory"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationListError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Create an issue category",
+        "tags": [
+          "issue_categories"
+        ],
+        "x-codegen-request-body-name": "issue_category"
+      }
+    },
+    "/issue_categories/{id}": {
+      "delete": {
+        "description": "Delete issue category",
+        "operationId": "DeleteIssueCategory",
+        "parameters": [
+          {
+            "description": "Issue category ID as UUID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "content": {},
+            "description": "No Content"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Delete issue category",
+        "tags": [
+          "issue_categories"
+        ]
+      },
+      "get": {
+        "description": "Get issue category",
+        "operationId": "GetIssueCategory",
+        "parameters": [
+          {
+            "description": "Issue category ID as UUID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IssueCategory"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Get issue category",
+        "tags": [
+          "issue_categories"
+        ]
+      },
+      "patch": {
+        "description": "Update some fields of an issue category",
+        "operationId": "UpdateIssueCategory",
+        "parameters": [
+          {
+            "description": "Issue Category ID as UUID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IssueCategoryUpdateParams"
+              }
+            }
+          },
+          "description": "Issue Category",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IssueCategory"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationListError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Update an Issue Category",
+        "tags": [
+          "issue_categories"
+        ],
+        "x-codegen-request-body-name": "issue_category"
+      }
+    },
+    "/issues": {
+      "get": {
+        "description": "List issues",
+        "operationId": "ListIssues",
+        "parameters": [
+          {
+            "description": "Results per page",
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Ordering attribute with optional '-' prefix for descending order. Valid attributes: name, severity, category.name, vulnerabilities.active, vulnerabilities.resolved",
+            "in": "query",
+            "name": "order_by",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter for issues that belong to a category in the provided list",
+            "explode": false,
+            "in": "query",
+            "name": "category.id",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filter for issues that have active vulnerabilities",
+            "in": "query",
+            "name": "vulnerabilities.has_active",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Filter by count of active vulnerabilities",
+            "in": "query",
+            "name": "vulnerabilities.active_gte",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filter by count of resolved vulnerabilities",
+            "in": "query",
+            "name": "vulnerabilities.resolved_gte",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filter by name. Supports partially matching.",
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter for issues that have a severity in the provided list",
+            "explode": false,
+            "in": "query",
+            "name": "severity",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filter for issues that have an ID in the provided list",
+            "explode": false,
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedIssue"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationListError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List issues",
+        "tags": [
+          "issues"
+        ]
+      },
+      "post": {
+        "description": "Create issue",
+        "operationId": "CreateIssue",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IssueCreateParams"
+              }
+            }
+          },
+          "description": "Issue",
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Issue"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationListError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Create an Issue",
+        "tags": [
+          "issues"
+        ],
+        "x-codegen-request-body-name": "issue"
+      }
+    },
+    "/issues/{id}": {
+      "delete": {
+        "description": "Delete an issue, and it's vulnerabilities",
+        "operationId": "DeleteIssue",
+        "parameters": [
+          {
+            "description": "Issue ID as UUID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "content": {},
+            "description": "No Content"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Delete an issue",
+        "tags": [
+          "issues"
+        ]
+      },
+      "get": {
+        "description": "Get issue",
+        "operationId": "GetIssue",
+        "parameters": [
+          {
+            "description": "Issue ID as UUID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Issue"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Get issue",
+        "tags": [
+          "issues"
+        ]
+      },
+      "patch": {
+        "description": "Update some fields of an issue",
+        "operationId": "UpdateIssue",
+        "parameters": [
+          {
+            "description": "Issue ID as UUID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IssueUpdateParams"
+              }
+            }
+          },
+          "description": "Issue",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Issue"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationListError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Update an Issue",
+        "tags": [
+          "issues"
+        ],
+        "x-codegen-request-body-name": "issue"
+      }
+    },
+    "/log_forwarders": {
+      "post": {
+        "description": "Create log forwarder",
+        "operationId": "CreateLogForwarder",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogForwarderCreateParams"
+              }
+            }
+          },
+          "description": "LogForwarder",
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogForwarder"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationListError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Create log forwarder",
+        "tags": [
+          "log_forwarders"
+        ],
+        "x-codegen-request-body-name": "log_forwarder"
+      }
+    },
+    "/log_forwarders/{id}": {
+      "delete": {
+        "description": "Delete a log forwarder",
+        "operationId": "DeleteLogForwarder",
+        "parameters": [
+          {
+            "description": "Log forwarder ID as UUID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "content": {},
+            "description": "No Content"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Delete a log forwarder",
+        "tags": [
+          "log_forwarders"
+        ]
+      },
+      "get": {
+        "description": "Get a log forwarder",
+        "operationId": "GetLogForwarder",
+        "parameters": [
+          {
+            "description": "Log forwarder ID as UUID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogForwarder"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Get a log forwarder",
+        "tags": [
+          "log_forwarders"
+        ]
+      }
+    },
+    "/vulnerabilities": {
+      "get": {
+        "description": "List vulnerabilities",
+        "operationId": "ListVulnerabilities",
+        "parameters": [
+          {
+            "description": "Results per page",
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page number",
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Ordering attribute with optional '-' prefix for descending order. Valid attributes: issue.severity, status, resource.kind, issue.category.name, issue.name, first_detected_at, and last_detected_at.",
+            "in": "query",
+            "name": "order_by",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filters for vulnerabilities that have a status in the provided list.",
+            "explode": false,
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filters for vulnerabilities that have been suppressed or not.",
+            "in": "query",
+            "name": "suppressed",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Filters for vulnerabilities that were first seen since the provided value - can be one of day, week, month, year",
+            "in": "query",
+            "name": "first_detected_at",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filters for vulnerabilities that were last seen since the provided value - can be one of day, week, month, year",
+            "in": "query",
+            "name": "last_detected_at",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filters for vulnerabilities that are associated with a resource kind in the provided list.",
+            "explode": false,
+            "in": "query",
+            "name": "resource.kind",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filters for vulnerabilities that belongs to a rule with a severity in the provided list.",
+            "explode": false,
+            "in": "query",
+            "name": "issue.severity",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filters for vulnerabilities that belong to a rule in the provided list.",
+            "explode": false,
+            "in": "query",
+            "name": "issue.id",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filters for vulnerabilities that belong to a rule that belongs to a category in the provided list.",
+            "explode": false,
+            "in": "query",
+            "name": "issue.category.id",
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedVulnerability"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List vulnerabilities",
+        "tags": [
+          "vulnerabilities"
+        ]
+      },
+      "post": {
+        "description": "Create or update a vulnerability",
+        "operationId": "UpsertVulnerability",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VulnerabilityUpsert"
+              }
+            }
+          },
+          "description": "Vulnerability",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vulnerability"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationListError"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Create or update a vulnerability",
+        "tags": [
+          "vulnerabilities"
+        ],
+        "x-codegen-request-body-name": "vulnerability"
+      }
+    },
+    "/vulnerabilities/{id}": {
+      "get": {
+        "description": "Get an existing vulnerability",
+        "operationId": "GetVulnerability",
+        "parameters": [
+          {
+            "description": "Vulnerability ID as UUID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vulnerability"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidInputError"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDeniedError"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Get a vulnerability",
+        "tags": [
+          "vulnerabilities"
+        ]
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "/v2"
+    }
+  ],
+  "x-original-swagger-version": "2.0"
+}
