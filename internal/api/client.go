@@ -61,9 +61,18 @@ type LogForwarderRequest struct {
 }
 
 type LogForwarder struct {
-	ID        uuid.UUID `json:"id"`
-	Name      string    `json:"name"`
-	SubjectID string    `json:"subject_id"`
+	ID        uuid.UUID        `json:"id"`
+	Name      string           `json:"name"`
+	SubjectID string           `json:"subject_id"`
+	Source    *ForwarderSource `json:"source,omitempty"`
+}
+
+type ForwarderSource struct {
+	BucketName string `json:"bucket_name"`
+	RoleARN    string `json:"role_arn"`
+	SQSARN     string `json:"sqs_arn"`
+	Region     string `json:"region"`
+	AccountID  string `json:"account_id"`
 }
 
 // CreateLogForwarder makes an authenticated request to the Ghost API to create a new log
@@ -156,5 +165,47 @@ func (c *GhostClient) DeleteLogForwarder(id uuid.UUID) error {
 		return fmt.Errorf("delete log forwarder: %w", ErrNotFound)
 	default:
 		return fmt.Errorf("delete log forwarder: unexpected status %v", resp.StatusCode)
+	}
+}
+
+type updateForwarderRequest struct {
+	Source *ForwarderSource `json:"source,omitempty"`
+}
+
+// UpdateLogForwarderSource makes an authenticated request to the Ghost API to update the
+// source for log forwarder with the given ID.
+// Setting the source to nil deletes the source.
+func (c *GhostClient) UpdateLogForwarderSource(id uuid.UUID, source *ForwarderSource) (*LogForwarder, error) {
+	bodyBytes, err := json.Marshal(updateForwarderRequest{Source: source})
+	if err != nil {
+		return nil, fmt.Errorf("create log forwarder: %w", err)
+	}
+
+	body := bytes.NewReader(bodyBytes)
+	patchReq, err := c.NewRequest("PATCH", "/v2/log_forwarders/"+id.String(), body)
+	if err != nil {
+		return nil, fmt.Errorf("update log forwarder source: %w", err)
+	}
+
+	resp, err := c.HTTP.Do(patchReq)
+	if err != nil {
+		return nil, fmt.Errorf("update log forwarder source: %w", err)
+	}
+
+	defer resp.Body.Close()
+	dec := json.NewDecoder(resp.Body)
+
+	switch resp.StatusCode {
+	case http.StatusOK:
+		var forwarder LogForwarder
+		if err := dec.Decode(&forwarder); err != nil {
+			return nil, fmt.Errorf("update log forwarder: %w", err)
+		}
+		return &forwarder, nil
+	case http.StatusNotFound:
+		return nil, fmt.Errorf("update log forwarder: %w", ErrNotFound)
+	default:
+		bodyBytes, _ = io.ReadAll(resp.Body)
+		return nil, fmt.Errorf("update log forwarder: unexpected status %v: %v", resp.StatusCode, string(bodyBytes))
 	}
 }
