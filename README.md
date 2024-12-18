@@ -55,3 +55,6 @@ output "subject_id" {
 To run the acceptance tests you must first set a valid `GHOST_API_KEY` in the environment.
 Running `make test-acc` will run the acceptance tests to exercise the various terraform
 resources using the actual API which will create/destroy _real resources_ in the platform.
+
+### Client Generation
+The provider uses an Go client generated from the OpenAPI specification for the Ghost API. Run `make download-openapi-spec` to fetch the most recent version of the API specification and `make generate` to re-generate the Go client.

@@ -13,6 +13,9 @@ test-acc:
 lint:
 	golangci-lint run
 
+download-openapi-spec:
+	curl -o openapi.json https://api.ghostsecurity.com/docs/v2/doc.json
+
 openapi-client:
 	which openapi-generator-cli 2>/dev/null || npm install -g @openapitools/openapi-generator-cli 
 	openapi-generator-cli version-manager set 7.10.0
@@ -24,4 +27,4 @@ generate: openapi-client
 check-clean:
 	@git diff --exit-code || (echo "\033[0;31mWorking directory is not clean - did you run 'make generate' and commit the changes?" && exit 1)
 
-.PHONY: install build test lint generate check-clean test-acc openapi-client
+.PHONY: install build test lint generate check-clean test-acc openapi-client download-openapi-spec
