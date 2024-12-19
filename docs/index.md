@@ -1,10 +1,11 @@
 ---
 page_title: "Ghost Provider"
 description: |-
-  The Ghost provider provides utilities for working with the [Ghost Security](https://ghostsecurity.com) platform.
+  The Ghost provider provides utilities for working with the Ghost Security platform.
 ---
 
 # Ghost Provider
+The Ghost provider provides utilities for working with the [Ghost Security](https://ghostsecurity.com) platform.
 
 ## Example Usage
 
