@@ -17,7 +17,7 @@ To configure terraform to use the locally installed provider instead of the terr
 ```hcl
 provider_installation {
   dev_overrides {
-      "ghostsecurity.com/dev/ghost" = "<PATH>"
+      "ghostsecurity/ghost" = "<PATH>"
   }
 
   direct {}
@@ -34,7 +34,7 @@ Example `main.tf`:
 terraform {
   required_providers {
     ghost = {
-      source = "ghostsecurity.com/dev/ghost",
+      source = "ghostsecurity/ghost",
     }
   }
 }
