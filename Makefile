@@ -11,7 +11,7 @@ test-acc:
 	TF_ACC=true go test ./...
 
 lint:
-	golangci-lint run
+	golangci-lint run --timeout 120s
 
 generate:
 	cd tools; go generate
