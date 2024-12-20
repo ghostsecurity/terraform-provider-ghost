@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   release:
+    environment: terraform
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
