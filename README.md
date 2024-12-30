@@ -1,6 +1,8 @@
 # terraform-provider-ghost
 The [Ghost Security](https://ghostsecurity.com/) terraform provider.
 
+Terraform Registry: [ghostsecurity/ghost](https://registry.terraform.io/providers/ghostsecurity/ghost/latest/docs)
+
 ## Development
 Refer to the [Hashicorp Documentation](https://developer.hashicorp.com/terraform/tutorials/providers-plugin-framework/providers-plugin-framework-provider) for more details on developing custom providers.
 
@@ -50,6 +52,9 @@ output "subject_id" {
     value = ghost_log_forwarder.example.subject_id
 }
 ```
+
+### Releasing a new version
+Tag a new release version using the GitHub releases and the `release` workflow will run to build the new provider version for all the supported platforms. Release version tag must be a semantic version starting with `v` (for example `v0.7.2`).
 
 ### Acceptance Tests
 To run the acceptance tests you must first set a valid `GHOST_API_KEY` in the environment.
