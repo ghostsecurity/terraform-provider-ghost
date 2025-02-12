@@ -76,10 +76,7 @@ func (p *GhostProvider) Configure(ctx context.Context, req provider.ConfigureReq
 }
 
 func (p *GhostProvider) Resources(ctx context.Context) []func() resource.Resource {
-	return []func() resource.Resource{
-		NewLogForwarderResource,
-		NewAWSLogSourceResource,
-	}
+	return []func() resource.Resource{}
 }
 
 func (p *GhostProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
